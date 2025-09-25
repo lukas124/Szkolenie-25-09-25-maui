@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:DataType="root:HamburgerMenuViewModel"
+             xmlns:iOsSpecific="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+             xmlns:root="clr-namespace:MauiStart.Root"
+             x:Class="MauiStart.Root.HamburgerMenu"
+             iOsSpecific:Page.UseSafeArea="True"
+             Title="Flyout"
+             BackgroundColor="White">
+    
+    <ContentPage.Content>
+        
+        <StackLayout>
+
+            <StackLayout BindableLayout.ItemsSource="{Binding MenuItems}">
+
+                <BindableLayout.ItemTemplate>
+
+                    <DataTemplate x:DataType="root:MenuItem">
+                        
+                        <StackLayout Orientation="Horizontal"
+                                     Margin="25">
+
+                            <Image Source="{Binding Icon}"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />
+
+                            <Label Text="{Binding Title}"
+                                   Margin="10,0"
+                                   Padding="0"
+                                   HorizontalTextAlignment="Center"
+                                   VerticalTextAlignment="Center">
+
+                                <Label.GestureRecognizers>
+
+                                    <TapGestureRecognizer Command="{Binding Command}" />
+
+                                </Label.GestureRecognizers>
+
+                            </Label>
+
+                        </StackLayout>
+                        
+                    </DataTemplate>
+
+                </BindableLayout.ItemTemplate>
+
+            </StackLayout>
+            
+        </StackLayout>
+        
+    </ContentPage.Content>
+    
+</ContentPage>

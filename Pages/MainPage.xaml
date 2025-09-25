@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<base:BasePage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:base="clr-namespace:MauiStart.Base"
+               xmlns:models="clr-namespace:MauiStart.Models"
+               xmlns:viewModels="clr-namespace:MauiStart.ViewModels"
+               x:DataType="viewModels:MainViewModel"
+               x:Class="MauiStart.Pages.MainPage"
+               Title="Main page">
+
+    <ContentPage.Content>
+
+        <StackLayout>
+
+           <Label>Hello .NET MAUI!</Label>
+            
+        </StackLayout>
+
+    </ContentPage.Content>
+
+</base:BasePage>

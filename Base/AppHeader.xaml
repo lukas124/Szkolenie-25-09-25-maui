@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ControlTemplate
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:MauiStart.Base"
+    x:Class="MauiStart.Base.AppHeader"
+    x:Key="AppHeader">
+    
+    <Grid BindingContext="{Binding Source={x:RelativeSource TemplatedParent}}" 
+          RowSpacing="0">
+        
+        <Grid RowSpacing="0">
+            
+            <Grid.RowDefinitions>
+                
+                <RowDefinition Height="Auto" /> <!-- Header -->
+                <RowDefinition Height="1" /> <!-- Separator -->
+                <RowDefinition Height="*" /> <!-- Content -->
+                
+            </Grid.RowDefinitions>
+            
+            <!-- Header !-->
+            <AbsoluteLayout  
+                Grid.Row="0"
+                HeightRequest="50"
+                Padding="10">
+                
+                <!-- Menu icon -->
+                <Image 
+                    Source="menu.png" 
+                    IsVisible="{Binding CanNavigateBack,
+                                Source={RelativeSource AncestorType={x:Type base:BaseViewModel}},                
+                                Converter={StaticResource InverseBoolConverter}}"
+                    AbsoluteLayout.LayoutBounds="0,0"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    HeightRequest="30"
+                    WidthRequest="30">
+                    
+                    <Image.GestureRecognizers>
+                        
+                        <TapGestureRecognizer Command="{Binding MenuButtonCommand,
+                            Source={RelativeSource AncestorType={x:Type base:BasePage}}}" />                
+                        
+                    </Image.GestureRecognizers>
+                    
+                </Image>
+            
+                <!-- Back icon -->
+                <Image 
+                    Source="back.png"
+                    IsVisible="{Binding CanNavigateBack,
+                                Source={RelativeSource AncestorType={x:Type base:BaseViewModel}}}"
+                    AbsoluteLayout.LayoutBounds="0,0"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center"
+                    HeightRequest="30"
+                    WidthRequest="30">
+            
+                    <Image.GestureRecognizers>
+            
+                        <TapGestureRecognizer Command="{Binding BackButtonCommand,
+                            Source={RelativeSource AncestorType={x:Type base:BasePage}}}" />
+            
+                    </Image.GestureRecognizers>
+            
+                </Image>
+                
+                <!-- Page title -->
+                <Label
+                    Text="{Binding Title, Source={RelativeSource AncestorType={x:Type base:BasePage}}}"
+                    FontSize="18"
+                    TextColor="Black"
+                    AbsoluteLayout.LayoutBounds="0.5,0"
+                    AbsoluteLayout.LayoutFlags="PositionProportional"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"
+                    HeightRequest="30" />
+                
+            </AbsoluteLayout>
+            
+            <!-- Separator between top bar and content section -->
+            <BoxView Grid.Row="1"
+                     HeightRequest="1"
+                     HorizontalOptions="FillAndExpand"
+                     VerticalOptions="Start"
+                     BackgroundColor="Black"/>
+            
+            <!-- Content -->
+            <Grid Grid.Row="2">
+                
+                <!-- Content section -->
+                <ContentPresenter BackgroundColor="White" />
+                
+            </Grid>
+            
+        </Grid>
+        
+    </Grid>
+    
+</ControlTemplate>
