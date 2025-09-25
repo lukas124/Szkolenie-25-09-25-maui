@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:MauiStart.Components"
+             x:Class="MauiStart.Components.InfiniteCollectionViewComponent"
+             x:Name="Root">
+
+    <Grid>
+        <!-- Scrollable list -->
+        <CollectionView x:Name="List"
+                        ItemsSource="{Binding ItemsSource, Source={x:Reference Root}}"
+                        RemainingItemsThreshold="1"
+                        ItemsUpdatingScrollMode="KeepScrollOffset"
+                        VerticalOptions="FillAndExpand"
+                        RemainingItemsThresholdReached="OnRemainingItemsThresholdReached">
+            
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" />
+            </CollectionView.ItemsLayout>
+            
+            <CollectionView.Footer>
+                
+                <components:LoadIndicatorComponent IsRunning="{Binding IsLoading, Source={x:Reference Root}}"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"
+                                                   InputTransparent="True" />
+                
+            </CollectionView.Footer>
+            
+        </CollectionView>
+        
+    </Grid>
+</ContentView>

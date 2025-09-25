@@ -1,9 +1,7 @@
 ﻿using MauiStart.Models.Services.Implementations;
 using MauiStart.Models.Services.Interfaces;
 using MauiStart.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui.Controls.Hosting;
-using Microsoft.Maui.Hosting;
+using CommunityToolkit.Maui;
 
 namespace MauiStart;
 
@@ -14,6 +12,7 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

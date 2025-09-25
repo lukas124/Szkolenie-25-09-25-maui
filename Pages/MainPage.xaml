@@ -1,22 +1,50 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
 <base:BasePage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                xmlns:base="clr-namespace:MauiStart.Base"
                xmlns:models="clr-namespace:MauiStart.Models"
                xmlns:viewModels="clr-namespace:MauiStart.ViewModels"
+               xmlns:components="clr-namespace:MauiStart.Components"
                x:DataType="viewModels:MainViewModel"
                x:Class="MauiStart.Pages.MainPage"
+               x:Name="This"
                Title="Main page">
-
+    
     <ContentPage.Content>
-
-        <StackLayout>
-
-           <Label>Hello .NET MAUI!</Label>
+        
+        <Grid RowDefinitions="Auto,*">
             
-        </StackLayout>
+            <Label Grid.Row="0"
+                   Text="Hello .NET MAUI!"
+                   Margin="12,12,12,6" />
 
+            <!-- Content row with InfiniteCollectionViewComponent" -->
+            <Grid Grid.Row="1">
+                
+                <components:InfiniteCollectionViewComponent PageSize="20"
+                                                            PageProvider="{Binding LoadPage}">
+                    
+                    <components:InfiniteCollectionViewComponent.ItemTemplate>
+                        
+                        <DataTemplate x:DataType="models:User">
+                            
+                            <VerticalStackLayout Padding="12">
+                                
+                                <Label Text="{Binding Name}" TextColor="Black" />
+                                <Label Text="{Binding Email}" />
+                                
+                            </VerticalStackLayout>
+                            
+                        </DataTemplate>
+                        
+                    </components:InfiniteCollectionViewComponent.ItemTemplate>
+                    
+                </components:InfiniteCollectionViewComponent>
+                
+            </Grid>
+            
+        </Grid>
+        
     </ContentPage.Content>
-
+    
 </base:BasePage>

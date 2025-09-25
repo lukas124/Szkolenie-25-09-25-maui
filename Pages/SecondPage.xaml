@@ -5,13 +5,21 @@
                xmlns:base="clr-namespace:MauiStart.Base"
                xmlns:viewModels="clr-namespace:MauiStart.ViewModels"
                xmlns:pages="clr-namespace:MauiStart.Pages"
+               xmlns:components="clr-namespace:MauiStart.Components"
                x:DataType="viewModels:SecondViewModel"
                x:Class="MauiStart.Pages.SecondPage"
                Title="Second page">
     <pages:SecondPage.Content>
 
-        <Label>Second page!</Label>
-
+        <StackLayout>
+            
+            <Label>Second page!</Label>
+        
+            <components:LoadIndicatorComponent Message="I'm working..."
+                                               IsRunning="True" />
+            
+        </StackLayout>
+        
     </pages:SecondPage.Content>
 
 </base:BasePage>

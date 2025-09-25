@@ -2,7 +2,7 @@ using System.Windows.Input;
 
 namespace MauiStart.Components;
 
-public partial class ButtonWithIcon : Frame
+public partial class ButtonWithIcon
 {
     #region Bindable properties
     
