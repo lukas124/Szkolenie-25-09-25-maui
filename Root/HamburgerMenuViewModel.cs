@@ -27,6 +27,13 @@ public class HamburgerMenuViewModel : BaseViewModel
                         await NavigationService.NavigateBackToHome()),
                     Icon = ImageSource.FromFile("play.png")
                 },
+                new MenuItem
+                {
+                    Title = "Second page",
+                    Command = new Command(async () =>
+                        await NavigationService.NavigateToAsync<SecondViewModel>()),
+                    Icon = ImageSource.FromFile("play.png")
+                },
             });
     }
 }

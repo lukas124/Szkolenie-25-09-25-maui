@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:base="clr-namespace:MauiStart.Base"
+    xmlns:root="clr-namespace:MauiStart.Root"
     x:Class="MauiStart.Base.AppHeader"
     x:Key="AppHeader">
     
@@ -28,10 +29,8 @@
                 <!-- Menu icon -->
                 <Image 
                     Source="menu.png" 
-                    IsVisible="{Binding CanNavigateBack,
-                                Source={RelativeSource AncestorType={x:Type base:BaseViewModel}},                
-                                Converter={StaticResource InverseBoolConverter}}"
-                    AbsoluteLayout.LayoutBounds="0,0"
+                    AbsoluteLayout.LayoutBounds="1,0"
+                    AbsoluteLayout.LayoutFlags="PositionProportional"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     HeightRequest="30"
@@ -97,6 +96,21 @@
             </Grid>
             
         </Grid>
+        
+        <!-- Layer to close main menu -->
+        <StackLayout
+            IsVisible="{Binding ShowHamburgerMenu, Source={RelativeSource AncestorType={x:Type root:RootPage}}}">
+
+            <StackLayout.GestureRecognizers>
+
+                <TapGestureRecognizer Command="{Binding MenuButtonCommand, Source={RelativeSource AncestorType={x:Type base:BasePage}}}" />
+
+            </StackLayout.GestureRecognizers>
+
+        </StackLayout>
+
+        <root:HamburgerMenu
+            IsVisible="{Binding ShowHamburgerMenu, Source={RelativeSource AncestorType={x:Type root:RootPage}}}" />
         
     </Grid>
     

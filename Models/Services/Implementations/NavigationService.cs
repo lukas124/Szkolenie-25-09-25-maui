@@ -22,7 +22,7 @@ public class NavigationService : INavigationService
             }
 
             await appPage.Navigation.PopToRootAsync(false);
-            appPage.IsPresented = false;
+            appPage.ShowHamburgerMenu = false;
         }
         else
         {
@@ -59,7 +59,7 @@ public class NavigationService : INavigationService
                 await InitializeRootPage(rootPage);
             }
             
-            rootPage.IsPresented = false;
+            rootPage.ShowHamburgerMenu = false;
             await viewModel.OnNavigatedTo(parameter);
             
             if (showModal)

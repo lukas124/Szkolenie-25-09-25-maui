@@ -56,7 +56,7 @@ public abstract class BasePage : ContentPage
     {
         if (Application.Current.MainPage is RootPage rootPage)
         {
-            rootPage.IsPresented = !rootPage.IsPresented;
+            rootPage.ShowHamburgerMenu = !rootPage.ShowHamburgerMenu;
         }
     }
 

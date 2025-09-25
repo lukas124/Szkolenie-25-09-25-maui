@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
+<Border
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:root="clr-namespace:MauiStart.Root"
+    x:Class="MauiStart.Root.HamburgerMenu"
+    StrokeShape="RoundRectangle 10"
+    Background="White"
+    WidthRequest="220"
+    VerticalOptions="Start"
+    HorizontalOptions="End"
+    Padding="0">
 
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:DataType="root:HamburgerMenuViewModel"
-             xmlns:iOsSpecific="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
-             xmlns:root="clr-namespace:MauiStart.Root"
-             x:Class="MauiStart.Root.HamburgerMenu"
-             iOsSpecific:Page.UseSafeArea="True"
-             Title="Flyout"
-             BackgroundColor="White">
-    
-    <ContentPage.Content>
-        
+    <Border.Shadow>
+        <Shadow Brush="Black"
+                Offset="-10,30"
+                Opacity="0.3"
+                Radius="100" />
+    </Border.Shadow>
+
+    <Border.Content>
+
         <StackLayout>
 
             <StackLayout BindableLayout.ItemsSource="{Binding MenuItems}">
@@ -19,7 +27,7 @@
                 <BindableLayout.ItemTemplate>
 
                     <DataTemplate x:DataType="root:MenuItem">
-                        
+
                         <StackLayout Orientation="Horizontal"
                                      Margin="25">
 
@@ -42,15 +50,15 @@
                             </Label>
 
                         </StackLayout>
-                        
+
                     </DataTemplate>
 
                 </BindableLayout.ItemTemplate>
 
             </StackLayout>
-            
+
         </StackLayout>
         
-    </ContentPage.Content>
+    </Border.Content>
     
-</ContentPage>
+</Border>

@@ -1,25 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<FlyoutPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-            xmlns:root="clr-namespace:MauiStart.Root"
-            x:Class="MauiStart.Root.RootPage"
-            IsGestureEnabled="False">
-    
-    <!-- Hamburger menu section -->
-    <FlyoutPage.Flyout>
-        
-        <!-- Hamburger menu -->
-        <root:HamburgerMenu />
-        
-    </FlyoutPage.Flyout>
-    
-    <!-- Content section -->
-    <FlyoutPage.Detail>
-        
-        <!-- Content container "NavigationPage" -->
-        <NavigationPage x:Name="Container" BackgroundColor="White" />
-        
-    </FlyoutPage.Detail>
-    
-</FlyoutPage>
+<NavigationPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    x:Name="Container" 
+    x:Class="MauiStart.Root.RootPage"
+    BackgroundColor="White"/>

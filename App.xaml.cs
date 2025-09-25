@@ -25,5 +25,6 @@ public partial class App
     private static void ConfigurationNavigations()
     {
         NavigationService.ConfigureMap<MainViewModel, MainPage>();
+        NavigationService.ConfigureMap<SecondViewModel, SecondPage>();
     }
 }

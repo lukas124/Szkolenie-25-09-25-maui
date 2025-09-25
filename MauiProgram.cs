@@ -35,5 +35,6 @@ public static class MauiProgram
     static void RegisterViewModels(in IServiceCollection services)
     {
         services.AddSingleton<MainViewModel>();
+        services.AddTransient<SecondViewModel>();
     }
 }
