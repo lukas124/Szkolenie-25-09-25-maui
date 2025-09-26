@@ -32,7 +32,10 @@ public class NavigationService : INavigationService
 
     private async Task ClearModalStack(RootPage rootPage)
     {
-        await rootPage.Navigation.PopToRootAsync();
+        if (rootPage.Navigation.ModalStack.Any())
+        {
+            await rootPage.Navigation.PopToRootAsync();
+        }            
     }
 
     public async Task NavigateToModal<TViewModel>(bool animated = false) where TViewModel : BaseViewModel

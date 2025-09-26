@@ -5,6 +5,7 @@
                xmlns:models="clr-namespace:MauiStart.Models"
                xmlns:viewModels="clr-namespace:MauiStart.ViewModels"
                xmlns:components="clr-namespace:MauiStart.Components"
+               xmlns:views="clr-namespace:MauiStart.Views"
                x:DataType="viewModels:MainViewModel"
                x:Class="MauiStart.Pages.MainPage"
                x:Name="This"
@@ -16,29 +17,52 @@
                 
                 <HorizontalStackLayout>
                             
-                    <Button Text="Tab1"
+                    <Button Text="Tab0"
                             Command="{Binding SelectItemCommand}"
                             CommandParameter="0" />
 
-                    <Button Text="Tab2"
+                    <Button Text="Tab1"
                             Command="{Binding SelectItemCommand}"
                             CommandParameter="1" />
                             
                 </HorizontalStackLayout>
                 
-                <BoxView BackgroundColor="Blue"
-                         HorizontalOptions="FillAndExpand" 
-                         VerticalOptions="FillAndExpand"
-                         IsVisible="{Binding IsBox0Visible}" />
+                <ContentView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+
+                    <ContentView.Triggers>
+
+                        <DataTrigger TargetType="ContentView"
+                                     Binding="{Binding SelectedIndex}"
+                                     Value="0">
+
+                            <Setter Property="ControlTemplate" Value="{DynamicResource Tab0}" />
+
+                        </DataTrigger>
+                        
+                        <DataTrigger TargetType="ContentView"
+                                     Binding="{Binding SelectedIndex}"
+                                     Value="1">
+
+                            <Setter Property="ControlTemplate" Value="{DynamicResource Tab1}" />
+                            
+                        </DataTrigger>
+                        
+                    </ContentView.Triggers>
+                    
+                </ContentView>
                 
-                <BoxView BackgroundColor="Red"
-                         HorizontalOptions="FillAndExpand" 
-                         VerticalOptions="FillAndExpand"
-                         IsVisible="{Binding IsBox1Visible}" />
+                <!-- <BoxView BackgroundColor="Blue" -->
+                <!--          HorizontalOptions="FillAndExpand"  -->
+                <!--          VerticalOptions="FillAndExpand" -->
+                <!--          IsVisible="{Binding IsBox0Visible}" /> -->
+                <!-- -->
+                <!-- <BoxView BackgroundColor="Red" -->
+                <!--          HorizontalOptions="FillAndExpand"  -->
+                <!--          VerticalOptions="FillAndExpand" -->
+                <!--          IsVisible="{Binding IsBox1Visible}" /> -->
                 
             </StackLayout>
-            
-
+        
             <!-- ~1~ Content row with InfiniteCollectionViewComponent" @1@ -->
             <!-- <Grid Grid.Row="1"> -->
             <!--      -->
@@ -65,5 +89,26 @@
             <!-- </Grid> -->
         
     </base:BasePage.Content>
+    
+    <base:BasePage.Resources>
+
+        <ResourceDictionary>
+
+            <!-- Tabs -->
+            <ControlTemplate x:Key="Tab0">
+               
+                <views:Tab0View BindingContext="{x:Reference This}" />
+                
+            </ControlTemplate>
+            
+            <ControlTemplate x:Key="Tab1">
+               
+                <views:Tab1View BindingContext="{x:Reference This}" />
+                
+            </ControlTemplate>
+            
+        </ResourceDictionary>
+        
+    </base:BasePage.Resources>
     
 </base:BasePage>

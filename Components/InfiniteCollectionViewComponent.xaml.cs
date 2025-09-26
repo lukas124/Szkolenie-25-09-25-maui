@@ -55,21 +55,6 @@ public partial class InfiniteCollectionViewComponent : INotifyPropertyChanged
             defaultValue: null,
             propertyChanged: OnItemsOrProviderChanged);
 
-    private static void OnItemsOrProviderChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-        if (bindable is InfiniteCollectionViewComponent self)
-        {
-            _ = self.TryInitialLoadAsync();
-        }
-    }
-    
-    private async Task TryInitialLoadAsync()
-    {
-        if (_initialized) return;
-        if (PageProvider is null) return;
-        await LoadNextPageAsync();
-    }
-
     public Func<int, int, Task<IList>>? PageProvider
     {
         get => (Func<int, int, Task<IList>>?)GetValue(PageProviderProperty);
@@ -99,7 +84,7 @@ public partial class InfiniteCollectionViewComponent : INotifyPropertyChanged
     }
     
     #endregion
-
+    
     public InfiniteCollectionViewComponent()
     {
         InitializeComponent();
@@ -111,12 +96,27 @@ public partial class InfiniteCollectionViewComponent : INotifyPropertyChanged
         if (!_initialized)
             await LoadNextPageAsync();
     }
-    
+
     private async void OnRemainingItemsThresholdReached(object? sender, EventArgs e)
     {
         await LoadNextPageAsync();
     }
-    
+
+    private static void OnItemsOrProviderChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        if (bindable is InfiniteCollectionViewComponent self)
+        {
+            _ = self.TryInitialLoadAsync();
+        }
+    }
+
+    private async Task TryInitialLoadAsync()
+    {
+        if (_initialized) return;
+        if (PageProvider is null) return;
+        await LoadNextPageAsync();
+    }
+
     private async Task LoadNextPageAsync()
     {
         if (IsLoading || !_hasMore) return;
@@ -152,7 +152,7 @@ public partial class InfiniteCollectionViewComponent : INotifyPropertyChanged
     }
     
     #region INotifyPropertyChanged
-
+    
     protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName] string propertyName = "", Action onChanged = null)
     {
         if (EqualityComparer<T>.Default.Equals(backingStore, value))

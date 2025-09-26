@@ -9,19 +9,12 @@ public class MainViewModel : BaseViewModel
 {
     public ICommand SelectItemCommand { get; }
 
-    private bool _isBox0Visible;
-    public bool IsBox0Visible
-    {
-        get => _isBox0Visible;
-        set => SetProperty(ref _isBox0Visible, value);
-    }
-    
-    private bool _isBox1Visible;
+    private string _selectedIndex;
 
-    public bool IsBox1Visible
+    public string SelectedIndex
     {
-        get => _isBox1Visible;
-        set => SetProperty(ref _isBox1Visible, value);
+        get => _selectedIndex;
+        set => SetProperty(ref _selectedIndex, value);
     }
     
     // public override bool CanNavigateBack => false;
@@ -42,17 +35,7 @@ public class MainViewModel : BaseViewModel
 
     private void SelectBox(string boxNumber)
     {
-        if (boxNumber.Equals("0"))
-        {
-            IsBox0Visible = true;
-            IsBox1Visible = false;
-        }
-        
-        if (boxNumber.Equals("1"))
-        {
-            IsBox0Visible = false;
-            IsBox1Visible = true;
-        }
+        SelectedIndex = boxNumber;
     }
 
     // Simulated paged data source
