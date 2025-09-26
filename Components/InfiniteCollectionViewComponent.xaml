@@ -6,13 +6,13 @@
              x:Name="Root">
 
     <Grid>
-        <!-- Scrollable list -->
+      
         <CollectionView x:Name="List"
                         ItemsSource="{Binding ItemsSource, Source={x:Reference Root}}"
                         RemainingItemsThreshold="1"
                         ItemsUpdatingScrollMode="KeepScrollOffset"
                         VerticalOptions="FillAndExpand"
-                        RemainingItemsThresholdReached="OnRemainingItemsThresholdReached">
+                        RemainingItemsThresholdReached="OnRemainingItemsThresholdReached">            
             
             <CollectionView.ItemsLayout>
                 <LinearItemsLayout Orientation="Vertical" />
@@ -30,4 +30,5 @@
         </CollectionView>
         
     </Grid>
+    
 </ContentView>

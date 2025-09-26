@@ -3,6 +3,8 @@
     <PropertyGroup>
         <TargetFrameworks>net9.0-android;net9.0-ios;</TargetFrameworks>
 
+<!--        <AndroidEnableProfiler>true</AndroidEnableProfiler>-->
+
         <OutputType>Exe</OutputType>
         <UseMaui>true</UseMaui>
         <SingleProject>true</SingleProject>
