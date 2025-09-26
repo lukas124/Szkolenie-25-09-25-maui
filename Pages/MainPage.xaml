@@ -2,9 +2,7 @@
 <base:BasePage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                xmlns:base="clr-namespace:MauiStart.Base"
-               xmlns:models="clr-namespace:MauiStart.Models"
                xmlns:viewModels="clr-namespace:MauiStart.ViewModels"
-               xmlns:components="clr-namespace:MauiStart.Components"
                xmlns:views="clr-namespace:MauiStart.Views"
                x:DataType="viewModels:MainViewModel"
                x:Class="MauiStart.Pages.MainPage"
@@ -51,42 +49,7 @@
                     
                 </ContentView>
                 
-                <!-- <BoxView BackgroundColor="Blue" -->
-                <!--          HorizontalOptions="FillAndExpand"  -->
-                <!--          VerticalOptions="FillAndExpand" -->
-                <!--          IsVisible="{Binding IsBox0Visible}" /> -->
-                <!-- -->
-                <!-- <BoxView BackgroundColor="Red" -->
-                <!--          HorizontalOptions="FillAndExpand"  -->
-                <!--          VerticalOptions="FillAndExpand" -->
-                <!--          IsVisible="{Binding IsBox1Visible}" /> -->
-                
             </StackLayout>
-        
-            <!-- ~1~ Content row with InfiniteCollectionViewComponent" @1@ -->
-            <!-- <Grid Grid.Row="1"> -->
-            <!--      -->
-            <!--     <components:InfiniteCollectionViewComponent PageSize="20" -->
-            <!--                                                 PageProvider="{Binding LoadPage}"> -->
-            <!--          -->
-            <!--         <components:InfiniteCollectionViewComponent.ItemTemplate> -->
-            <!--              -->
-            <!--             <DataTemplate x:DataType="models:User"> -->
-            <!--                  -->
-            <!--                 <VerticalStackLayout Padding="12"> -->
-            <!--                      -->
-            <!--                     <Label Text="{Binding Name}" TextColor="Black" /> -->
-            <!--                     <Label Text="{Binding Email}" /> -->
-            <!--                      -->
-            <!--                 </VerticalStackLayout> -->
-            <!--                  -->
-            <!--             </DataTemplate> -->
-            <!--              -->
-            <!--         </components:InfiniteCollectionViewComponent.ItemTemplate> -->
-            <!--          -->
-            <!--     </components:InfiniteCollectionViewComponent> -->
-            <!--      -->
-            <!-- </Grid> -->
         
     </base:BasePage.Content>
     

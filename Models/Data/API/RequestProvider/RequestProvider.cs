@@ -124,7 +124,7 @@ public class RequestProvider(HttpMessageHandler _messageHandler) : IRequestProvi
 
             if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                throw new ServiceAuthenticationEx(content);
+                throw new ServiceAuthenticationException(content);
             }
 
             throw new HttpRequestExceptionException(response.StatusCode, content);

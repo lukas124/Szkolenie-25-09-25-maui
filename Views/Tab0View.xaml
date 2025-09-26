@@ -9,7 +9,32 @@
              x:Class="MauiStart.Views.Tab0View" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
     
     <ContentView.Content>
-        
+    
+    <components:InfiniteCollectionViewComponent PageSize="20"
+                                                PageProvider="{Binding TodoItemsProvider, 
+                                                Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}}">
+    
+        <components:InfiniteCollectionViewComponent.ItemTemplate>
+    
+            <DataTemplate x:DataType="models:TodoItem">
+    
+                <VerticalStackLayout Padding="12">
+    
+                    <Label Text="{Binding Name}" />
+                    <Label Text="{Binding Notes}" />
+                    <Switch IsToggled="{Binding Done}" />
+                    
+                    <Button Text="Remove" 
+                            Command="{Binding RemoveTodoItemCommand, Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}}"
+                            CommandParameter="{Binding .ID}"/>
+    
+                </VerticalStackLayout>
+    
+            </DataTemplate>
+    
+        </components:InfiniteCollectionViewComponent.ItemTemplate>
+    
+    </components:InfiniteCollectionViewComponent>
     
     </ContentView.Content>
     

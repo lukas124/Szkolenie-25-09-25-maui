@@ -9,7 +9,10 @@ namespace MauiStart.ViewModels;
 
 public class MainViewModel : BaseViewModel
 {
+    private readonly IRequestProvider _requestProvider;
     public ICommand SelectItemCommand { get; }
+    public ICommand CreateItemCommand { get; }
+    public ICommand RemoveTodoItemCommand { get; }
 
     private string _selectedIndex;
 
@@ -18,16 +21,44 @@ public class MainViewModel : BaseViewModel
         get => _selectedIndex;
         set => SetProperty(ref _selectedIndex, value);
     }
-    
-    // public override bool CanNavigateBack => false;
-    //
-    // // Page provider used by the InfiniteCollectionViewComponent (adapt to non-generic IList)
-    // public Func<int, int, Task<IList>> LoadPage => async (page, pageSize) => (IList)await GetUsersAsync(page, pageSize);
-    
-    public MainViewModel()
-    {
-        SelectItemCommand = new Command<string>((arg) => SelectBox(arg));
 
+    private string _name;
+
+    public string Name
+    {
+        get => _name;
+        set => SetProperty(ref _name, value);
+    }
+
+    private string _notes;
+
+    public string Notes
+    {
+        get => _notes;
+        set => SetProperty(ref _notes, value);
+    }
+
+    private bool _done;
+
+    public bool Done
+    {
+        get => _done;
+        set => SetProperty(ref _done, value);
+    }
+
+    public override bool CanNavigateBack => false;
+
+    public Func<int, int, Task<IList>> TodoItemsProvider =>
+        async (page, pageSize) => (IList)await GetTodoItemsAsync(page, pageSize);
+
+    public MainViewModel(IRequestProvider requestProvider)
+    {
+        _requestProvider = requestProvider;
+        SelectedIndex = "0";
+
+        SelectItemCommand = new Command<string>((arg) => SelectBox(arg));
+        CreateItemCommand = new Command(async () => await CrateItemAsync());
+        RemoveTodoItemCommand = new Command<string>(async (id) => await RemoveTdooItemAsync(id));
     }
 
     public override async Task OnViewAppearing()
@@ -40,20 +71,32 @@ public class MainViewModel : BaseViewModel
         SelectedIndex = boxNumber;
     }
 
-    // Simulated paged data source
-    // private static async Task<IList<User>> GetUsersAsync(int page, int pageSize)
-    // {
-    //     await Task.Delay(1500); // simulate network latency
-    //
-    //     var start = (page - 1) * pageSize;
-    //     var total = 100; // pretend there's a total number of users
-    //
-    //     if (start >= total)
-    //         return Array.Empty<User>();
-    //
-    //     var count = Math.Min(pageSize, total - start);
-    //     return Enumerable.Range(start, count)
-    //         .Select(i => new User($"User {i + 1}", $"user{i + 1}@example.com"))
-    //         .ToList();
-    // }
+    private async Task CrateItemAsync()
+    {
+        var newItem = new TodoItem
+        {
+            ID = Guid.NewGuid().ToString(),
+            Name = Name,
+            Notes = Notes,
+            Done = Done
+        };
+
+        await new SendNewToDoItemUseCase(_requestProvider).ExecuteAsync(newItem);
+    }
+
+    private async Task<IList<TodoItem>> GetTodoItemsAsync(int page, int pageSize)
+    {
+        return (await new RetrieveToDoItemsUseCase(_requestProvider).ExecuteAsync()).ToList();
+    }
+
+    private async Task RemoveTdooItemAsync(string id)
+    {
+        await new RemoveToDoItemUseCase(_requestProvider).ExecuteAsync(id);
+        await RefreshItemsAsync();
+    }
+
+    private async Task RefreshItemsAsync()
+    {
+        await NavigationService.NavigateToAsync<MainViewModel>();
+    }
 }

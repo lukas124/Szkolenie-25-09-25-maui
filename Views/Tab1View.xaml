@@ -8,6 +8,24 @@
     
     <ContentView.Content>
         
+        <StackLayout>
+            
+            <Label Text="Name" />
+                
+            <Entry Text="{Binding Name, Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}}" />
+                
+            <Label Text="Notes" />
+                
+            <Entry Text="{Binding Notes, Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}}" />
+                
+            <Label Text="Done" />
+                
+            <Switch IsToggled="{Binding Done, Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}}" />
+                
+            <Button Text="Save"
+                    Command="{Binding CreateItemCommand, Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}}" />
+            
+        </StackLayout>
         
     </ContentView.Content>
     
