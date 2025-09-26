@@ -2,6 +2,7 @@
 using MauiStart.Models.Services.Interfaces;
 using MauiStart.ViewModels;
 using CommunityToolkit.Maui;
+using MauiStart.Models.Data.API.RequestProvider;
 
 namespace MauiStart;
 
@@ -28,6 +29,13 @@ public static class MauiProgram
     static void RegisterServices(in IServiceCollection services)
     {
         services.AddSingleton<INavigationService, NavigationService>();
+        services.AddSingleton<IRequestProvider>(
+            sp =>
+            {
+                var debugHttpHandler = sp.GetKeyedService<HttpMessageHandler>("DebugHttpMessageHandler");
+                return new RequestProvider(debugHttpHandler);
+            });
+        
         services.AddScoped<ICameraService, CameraService>();
     }
 

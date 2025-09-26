@@ -6,8 +6,9 @@
              x:DataType="viewModels:MainViewModel"
              x:Class="MauiStart.Views.Tab1View">
     
-    <BoxView BackgroundColor="Red"
-             HorizontalOptions="FillAndExpand" 
-             VerticalOptions="FillAndExpand" />
+    <ContentView.Content>
+        
+        
+    </ContentView.Content>
     
 </ContentView>

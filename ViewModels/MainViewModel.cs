@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Windows.Input;
 using MauiStart.Base;
-using MauiStart.Models;
+using MauiStart.Models.Data.API.RequestProvider;
+using MauiStart.Models.Domain.UseCases;
+using MauiStart.Models.DTOs;
 
 namespace MauiStart.ViewModels;
 
