@@ -2,6 +2,8 @@ using System.Collections;
 using System.Windows.Input;
 using MauiStart.Base;
 using MauiStart.Models.Data.API.RequestProvider;
+using MauiStart.Models.Data.Repositories;
+using MauiStart.Models.Data.UoW;
 using MauiStart.Models.Domain.UseCases;
 using MauiStart.Models.DTOs;
 
@@ -10,6 +12,8 @@ namespace MauiStart.ViewModels;
 public class MainViewModel : BaseViewModel
 {
     private readonly IRequestProvider _requestProvider;
+    private readonly IRepositoriesUoW _repositoriesUoW;
+    
     public ICommand SelectItemCommand { get; }
     public ICommand CreateItemCommand { get; }
     public ICommand RemoveTodoItemCommand { get; }
@@ -51,9 +55,11 @@ public class MainViewModel : BaseViewModel
     public Func<int, int, Task<IList>> TodoItemsProvider =>
         async (page, pageSize) => (IList)await GetTodoItemsAsync(page, pageSize);
 
-    public MainViewModel(IRequestProvider requestProvider)
+    public MainViewModel(IRequestProvider requestProvider, IRepositoriesUoW  repositoriesUoW)
     {
         _requestProvider = requestProvider;
+        _repositoriesUoW = repositoriesUoW;
+        
         SelectedIndex = "0";
 
         SelectItemCommand = new Command<string>((arg) => SelectBox(arg));
@@ -73,30 +79,14 @@ public class MainViewModel : BaseViewModel
 
     private async Task CrateItemAsync()
     {
-        var newItem = new TodoItem
-        {
-            ID = Guid.NewGuid().ToString(),
-            Name = Name,
-            Notes = Notes,
-            Done = Done
-        };
-
-        await new SendNewToDoItemUseCase(_requestProvider).ExecuteAsync(newItem);
     }
 
     private async Task<IList<TodoItem>> GetTodoItemsAsync(int page, int pageSize)
     {
-        return (await new RetrieveToDoItemsUseCase(_requestProvider).ExecuteAsync()).ToList();
+        return (await new RetrieveToDoItemsUseCase(_requestProvider, _repositoriesUoW).ExecuteAsync()).ToList();
     }
 
     private async Task RemoveTdooItemAsync(string id)
     {
-        await new RemoveToDoItemUseCase(_requestProvider).ExecuteAsync(id);
-        await RefreshItemsAsync();
-    }
-
-    private async Task RefreshItemsAsync()
-    {
-        await NavigationService.NavigateToAsync<MainViewModel>();
     }
 }
