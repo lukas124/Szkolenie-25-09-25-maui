@@ -1,0 +1,88 @@
+trigger:
+  branches:
+    include:
+    - dev
+  paths:
+    include:
+    - MyProject.App
+    
+pool:
+  name: Azure Pipelines
+  vmImage: 'macOS-14'
+  demands:
+    - MSBuild
+ 
+stages:
+  - stage: DiscoveringChanges
+    jobs:
+    - job: AndroidDebugBuild
+      steps:        
+
+        - task: UseDotNet@2
+          displayName: 'Use .NET 9.0.301 SDK'
+          inputs:
+            packageType: sdk
+            version: 9.0.301
+            installationPath: $(Agent.ToolsDirectory)/dotnet
+
+        - task: Bash@3
+          displayName: Install MAUI
+          inputs:
+            targetType: 'inline'
+            script: |
+              dotnet nuget locals all --clear
+              dotnet workload install maui android wasm-tools
+
+        - task: Bash@3
+          displayName: Restore nuget
+          inputs:
+            targetType: 'inline'
+            script: |
+              cd $(Build.SourcesDirectory)/
+              dotnet restore MyProject.sln
+
+        - task: Bash@3
+          displayName: 'Change package name'
+          inputs:
+            targetType: 'inline'
+            script: |
+              manifest_path="$(Build.SourcesDirectory)/MyProject/MyProject.MAUI/Platforms/Android/Test/AndroidManifest.xml"
+              new_package_name="com.new.packageName"
+
+              sed -i '' -E "s/package=\"[^\"]*\"/package=\"$new_package_name\"/" "$manifest_path"
+            
+              grep 'package=' "$manifest_path"
+
+        - task: Bash@3
+          displayName: Build Maui.Android project
+          inputs:
+            targetType: 'inline'
+            script: |
+              cd $(Build.SourcesDirectory)/MyProject/MyProject.MAUI/
+              dotnet build -t:InstallAndroidDependencies -f net9.0-android "-p:AndroidSdkDirectory=/Users/runner/Library/Android/sdk"
+              dotnet publish --configuration Test --framework net9.0-android
+
+        - task: CopyFiles@2
+          displayName: Copy artifacts
+          inputs:
+            SourceFolder: '$(agent.builddirectory)'
+            Contents: |
+              **/*.apk
+            TargetFolder: '$(build.binariesdirectory)/Test'
+            flattenFolders: true
+
+        - task: AndroidSigning@3
+          displayName: 'Signing and aligning APK file'
+          inputs:
+            apkFiles: '$(build.binariesdirectory)/Test/*.apk'
+            apksignerKeystoreFile: 'AndroidSignin.jks'
+            apksignerKeystorePassword: ''
+            apksignerKeystoreAlias: 'key0'
+            apksignerKeyPassword: ''
+
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish artifacts'
+          inputs:
+            PathtoPublish: '$(build.binariesdirectory)/Test'
+            ArtifactName: 'drop'
+            publishLocation: 'Container'

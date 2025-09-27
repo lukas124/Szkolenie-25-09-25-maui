@@ -2,10 +2,9 @@ using SQLite;
 
 namespace MauiStart.Models.DTOs;
 
-[Table("TodoItems")]
+[Table("ToDoItems")]
 public class TodoItem
 {
-    [PrimaryKey, AutoIncrement]
     public string ID { get; set; }
     public string Name { get; set; }
     public string Notes { get; set; }

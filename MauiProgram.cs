@@ -2,9 +2,13 @@
 using MauiStart.Models.Services.Interfaces;
 using MauiStart.ViewModels;
 using CommunityToolkit.Maui;
+using MauiStart.Models.Data;
 using MauiStart.Models.Data.API.RequestProvider;
 using MauiStart.Models.Data.Database;
 using MauiStart.Models.Data.UoW;
+#if ANDROID
+using MauiStart.Platforms.Services;
+#endif
 using Microsoft.EntityFrameworkCore;
 
 namespace MauiStart;
@@ -26,8 +30,8 @@ public static class MauiProgram
         RegisterServices(builder.Services);
         RegisterViewModels(builder.Services);
         ConfigureDb(builder.Services);
-
-        var app =  builder.Build();
+        
+        var app = builder.Build();
         
         using (var scope = app.Services.CreateScope())
         {
@@ -44,11 +48,21 @@ public static class MauiProgram
         services.AddSingleton<IRequestProvider>(
             sp =>
             {
+#if RELEASE
+                var authHttpHandler = new AuthHttpClientHandler();
+                return new RequestProvider(authHttpHandler);
+#endif
                 var debugHttpHandler = sp.GetKeyedService<HttpMessageHandler>("DebugHttpMessageHandler");
                 return new RequestProvider(debugHttpHandler);
+                
             });
+        services.AddSingleton<CachePolicy>();
         
         services.AddScoped<ICameraService, CameraService>();
+        
+#if ANDROID
+        services.AddSingleton<IGooglePlayIntegrityService, GooglePlayIntegrityService>();
+#endif
     }
 
     static void RegisterViewModels(in IServiceCollection services)
@@ -56,14 +70,14 @@ public static class MauiProgram
         services.AddSingleton<MainViewModel>();
         services.AddTransient<SecondViewModel>();
     }
-
-    public static void ConfigureDb(in IServiceCollection services)
+    
+    static void ConfigureDb(in IServiceCollection services)
     {
         var dbPath = Path.Combine(FileSystem.AppDataDirectory, "app.db");
-
+        
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlite($"Filename={dbPath}"));
-        
-        services.AddTransient<IRepositoriesUoW, RepositoriesUoW>();
+
+        services.AddScoped<IRepositoriesUoW, RepositoriesUoW>();
     }
 }

@@ -1,18 +1,19 @@
-using System.Collections;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
+using CommunityToolkit.Maui.Core.Extensions;
 using MauiStart.Base;
+using MauiStart.Models.Data;
 using MauiStart.Models.Data.API.RequestProvider;
-using MauiStart.Models.Data.Repositories;
-using MauiStart.Models.Data.UoW;
 using MauiStart.Models.Domain.UseCases;
 using MauiStart.Models.DTOs;
+using NewRelic.MAUI.Plugin;
 
 namespace MauiStart.ViewModels;
 
 public class MainViewModel : BaseViewModel
 {
     private readonly IRequestProvider _requestProvider;
-    private readonly IRepositoriesUoW _repositoriesUoW;
+    private readonly CachePolicy _cachePolicy;
     
     public ICommand SelectItemCommand { get; }
     public ICommand CreateItemCommand { get; }
@@ -50,43 +51,76 @@ public class MainViewModel : BaseViewModel
         set => SetProperty(ref _done, value);
     }
 
+    private ObservableCollection<TodoItem> _items;
+    public ObservableCollection<TodoItem> Items
+    {
+        get => _items;
+        set => SetProperty(ref _items, value);
+    }
+
     public override bool CanNavigateBack => false;
 
-    public Func<int, int, Task<IList>> TodoItemsProvider =>
-        async (page, pageSize) => (IList)await GetTodoItemsAsync(page, pageSize);
-
-    public MainViewModel(IRequestProvider requestProvider, IRepositoriesUoW  repositoriesUoW)
+    public MainViewModel(IRequestProvider requestProvider, CachePolicy cachePolicy)
     {
         _requestProvider = requestProvider;
-        _repositoriesUoW = repositoriesUoW;
+        _cachePolicy = cachePolicy;
         
         SelectedIndex = "0";
 
-        SelectItemCommand = new Command<string>((arg) => SelectBox(arg));
+        SelectItemCommand = new Command<string>(async (arg) => await SelectBox(arg));
         CreateItemCommand = new Command(async () => await CrateItemAsync());
-        RemoveTodoItemCommand = new Command<string>(async (id) => await RemoveTdooItemAsync(id));
+        RemoveTodoItemCommand = new Command<TodoItem>(async (item) => await RemoveTdooItemAsync(item));
     }
 
     public override async Task OnViewAppearing()
     {
-        await base.OnViewAppearing();
+        await RefreshItemsAsync();
     }
 
-    private void SelectBox(string boxNumber)
+    private async Task SelectBox(string boxNumber)
     {
+        if (boxNumber == "0")
+        {
+            await RefreshItemsAsync();
+        }
         SelectedIndex = boxNumber;
     }
 
     private async Task CrateItemAsync()
     {
+        var newItem = new TodoItem
+        {
+            ID = Guid.NewGuid().ToString(),
+            Name = Name,
+            Notes = Notes,
+            Done = Done
+        };
+
+        await new SendNewToDoItemUseCase(_requestProvider).ExecuteAsync(newItem);
+        await SelectBox("0"); // go back to "Tab0"
     }
 
-    private async Task<IList<TodoItem>> GetTodoItemsAsync(int page, int pageSize)
+    private async Task<ObservableCollection<TodoItem>> GetTodoItemsAsync()
     {
-        return (await new RetrieveToDoItemsUseCase(_requestProvider, _repositoriesUoW).ExecuteAsync()).ToList();
+        try
+        {
+            return (await new RetrieveToDoItemsUseCase(_requestProvider, _cachePolicy).ExecuteAsync()).ToObservableCollection();
+        }
+        catch (Exception e)
+        {
+            CrossNewRelic.Current.RecordException(e);
+            return new ObservableCollection<TodoItem>();
+        }
     }
 
-    private async Task RemoveTdooItemAsync(string id)
+    private async Task RemoveTdooItemAsync(TodoItem item)
     {
+        await new RemoveToDoItemUseCase(_requestProvider).ExecuteAsync(item);
+        await RefreshItemsAsync();
+    }
+
+    private async Task RefreshItemsAsync()
+    {
+        Items = await GetTodoItemsAsync();
     }
 }

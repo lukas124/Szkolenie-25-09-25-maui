@@ -3,38 +3,35 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:MauiStart.ViewModels"
-             xmlns:components="clr-namespace:MauiStart.Components"
              xmlns:models="clr-namespace:MauiStart.Models.DTOs"
              x:DataType="viewModels:MainViewModel"
              x:Class="MauiStart.Views.Tab0View" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
     
     <ContentView.Content>
     
-    <components:InfiniteCollectionViewComponent PageSize="20"
-                                                PageProvider="{Binding TodoItemsProvider, 
-                                                Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}}">
-    
-        <components:InfiniteCollectionViewComponent.ItemTemplate>
-    
-            <DataTemplate x:DataType="models:TodoItem">
-    
-                <VerticalStackLayout Padding="12">
-    
-                    <Label Text="{Binding Name}" />
-                    <Label Text="{Binding Notes}" />
-                    <Switch IsToggled="{Binding Done}" />
-                    
-                    <Button Text="Remove" 
-                            Command="{Binding RemoveTodoItemCommand, Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}}"
-                            CommandParameter="{Binding .ID}"/>
-    
-                </VerticalStackLayout>
-    
-            </DataTemplate>
-    
-        </components:InfiniteCollectionViewComponent.ItemTemplate>
-    
-    </components:InfiniteCollectionViewComponent>
+        <CollectionView ItemsSource="{Binding Items, Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}}">
+        
+            <CollectionView.ItemTemplate>
+        
+                <DataTemplate x:DataType="models:TodoItem">
+        
+                    <VerticalStackLayout Padding="12">
+        
+                        <Label Text="{Binding Name}" />
+                        <Label Text="{Binding Notes}" />
+                        <Switch IsToggled="{Binding Done}" />
+                        
+                            <Button Text="Remove" 
+                                    Command="{Binding RemoveTodoItemCommand, Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}}"
+                                    CommandParameter="{Binding .}"/>
+        
+                    </VerticalStackLayout>
+        
+                </DataTemplate>
+        
+            </CollectionView.ItemTemplate>
+        
+        </CollectionView>
     
     </ContentView.Content>
     

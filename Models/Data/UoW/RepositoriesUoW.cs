@@ -6,14 +6,14 @@ namespace MauiStart.Models.Data.UoW;
 
 public class RepositoriesUoW : IRepositoriesUoW
 {
-    private readonly AppDbContext _dbContext;
+    private readonly AppDbContext _local;
 
-    public RepositoriesUoW(AppDbContext dbContext)
+    public RepositoriesUoW(AppDbContext local)
     {
-        _dbContext = dbContext;
+        _local = local;
     }
 
-    // Repositories
-    public IRepository<TodoItem> TodoItems =>
-        new TodoItemsRepository(_dbContext);
+    // Add new repositorie here
+    public IRepository<TodoItem> TodoItems => 
+        new TodoItemsRepository(_local);
 }

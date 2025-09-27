@@ -1,0 +1,88 @@
+trigger:
+  branches:
+    include:
+    - dev
+  paths:
+    include:
+    - MyProject  
+    
+pool:
+  name: Azure Pipelines
+  vmImage: 'macOS-15'
+  demands:
+    - MSBuild
+    - xcode
+     
+stages:
+  - stage: DiscoveringChanges
+    jobs:
+    - job: iOSTestBuild
+      steps:        
+
+      - task: UseDotNet@2
+        displayName: 'Use .NET 9.0.304 SDK'
+        inputs:
+          packageType: sdk
+          version: 9.0.304
+          installationPath: $(Agent.ToolsDirectory)/dotnet
+
+      - script: sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
+        displayName: 'Set Xcode Version'
+
+      - script: sudo xcodebuild -license accept
+        displayName: 'Accept Xcode License'
+          
+      - task: InstallAppleCertificate@2
+        displayName: 'Install an Apple certificate'
+        inputs:
+          certsecurefile: 'myCert.p12'
+          certPwd: ''
+          signingIdentity: 'iPhone Distribution: Name Lastname (xxxxxx)'
+          setUpPpartitionIdACLForPrivateKey: false
+            
+      - task: InstallAppleProvisioningProfile@1
+        displayName: 'Install an Apple provisioning profile'
+        inputs:
+          provisioningProfileLocation: 'secureFiles'
+          provProfileSecureFile: 'myProvisionProfile.mobileprovision'
+
+      - task: Bash@3
+        displayName: Install MAUI
+        inputs:
+          targetType: 'inline'
+          script: |
+            dotnet nuget locals all --clear
+            dotnet workload install maui ios wasm-tools
+            
+      - task: Bash@3
+        displayName: Restore nuget
+        inputs:
+          targetType: 'inline'
+          script: |
+            cd $(Build.SourcesDirectory)/
+            dotnet restore MyProject.sln
+        
+      - task: Bash@3
+        displayName: Build Maui iOS project
+        inputs:
+          targetType: 'inline'
+          script: |
+            cd $(Build.SourcesDirectory)/MyProject/
+            dotnet publish --configuration Test --framework net9.0-ios /p:Codesignkey="$(APPLE_CERTIFICATE_SIGNING_IDENTITY)" /p:CodesignProvision="$(APPLE_PROV_PROFILE_UUID)"
+
+      - task: CopyFiles@2
+        displayName: Copy artifacts
+        inputs:
+          SourceFolder: '$(agent.builddirectory)'
+          Contents: |
+            **/*.ipa
+          TargetFolder: '$(build.binariesdirectory)/Test'
+          flattenFolders: true
+
+      - task: PublishBuildArtifacts@1
+        displayName: Publish artifacts
+        inputs:
+          PathtoPublish: '$(build.binariesdirectory)/Test'
+          ArtifactName: 'drop'
+          publishLocation: 'Container'
+    

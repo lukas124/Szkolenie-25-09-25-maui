@@ -141,10 +141,10 @@ public class RequestProvider(HttpMessageHandler _messageHandler) : IRequestProvi
         return (T?)data;
     }
 
-    private static JsonContent SerializeToJson<T>(T data)
-    {
-        var typeInfo = MauiStartJsonSerializerContext.Default.GetTypeInfo(typeof(T)) ??
-                       throw new InvalidOperationException($"Missing type info for {typeof(T)}");
-        return JsonContent.Create(data, typeInfo);
-    }
+        private static JsonContent SerializeToJson<T>(T data)
+        {
+            var typeInfo = MauiStartJsonSerializerContext.Default.GetTypeInfo(typeof(T)) ??
+                           throw new InvalidOperationException($"Missing type info for {typeof(T)}");
+            return JsonContent.Create(data, typeInfo);
+        }
 }

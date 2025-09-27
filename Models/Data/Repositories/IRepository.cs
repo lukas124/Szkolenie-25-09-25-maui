@@ -5,7 +5,6 @@ public interface IRepository<T> where T : class
     T New();
     IQueryable<T> Query { get; }
     Task AddAsync(T entity);
-    Task AddRangeAsync(IEnumerable<T> entities);
     void Update(T entity);
     void Remove(T entity);
 }

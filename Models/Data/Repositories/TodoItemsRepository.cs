@@ -4,12 +4,12 @@ using MauiStart.Models.DTOs;
 namespace MauiStart.Models.Data.Repositories;
 
 public class TodoItemsRepository : IRepository<TodoItem>
-{
-    private readonly AppDbContext _dbContext;
+{ 
+    private readonly AppDbContext _local;
 
-    public TodoItemsRepository(AppDbContext dbContext)
+    public TodoItemsRepository(AppDbContext local)
     {
-        _dbContext = dbContext;
+        _local = local;
     }
     
     public TodoItem New()
@@ -17,29 +17,23 @@ public class TodoItemsRepository : IRepository<TodoItem>
         return new TodoItem();
     }
 
-    public IQueryable<TodoItem> Query => _dbContext.TodoItems;
-    
+    public IQueryable<TodoItem> Query => _local.TodoItems;
+
     public async Task AddAsync(TodoItem entity)
     {
-        await _dbContext.TodoItems.AddAsync(entity);
-        await _dbContext.SaveChangesAsync();
+        await _local.TodoItems.AddAsync(entity);
+        await _local.SaveChangesAsync();
     }
-
-    public async Task AddRangeAsync(IEnumerable<TodoItem> entities)
-    {
-        await _dbContext.TodoItems.AddRangeAsync(entities);
-        await _dbContext.SaveChangesAsync();
-    }
-
+    
     public void Update(TodoItem entity)
     {
-        _dbContext.TodoItems.Update(entity);
-        _dbContext.SaveChanges();
+        _local.TodoItems.Update(entity);
+        _local.SaveChanges();
     }
-
+    
     public void Remove(TodoItem entity)
     {
-        _dbContext.TodoItems.Remove(entity);
-        _dbContext.SaveChanges();
+        _local.TodoItems.Remove(entity);
+        _local.SaveChanges();
     }
 }
